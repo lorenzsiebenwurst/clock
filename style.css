@@ -1,0 +1,77 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  font-family: monospace;
+  height: 100%;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  background-color: gold;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#clockBorder {
+  position: relative;
+  width: 40vmin;
+  height: 40vmin;
+
+  border-radius: 50%;
+  border: 3px solid black;
+  box-shadow: 2px 2px 5px black;
+  background-color: snow;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#clockBorder > * {
+  position: absolute;
+  border-radius: 2px;
+  background-color: black;
+}
+
+#middleCircle {
+  width: 7%;
+  height: 7%;
+  border-radius: 50%;
+}
+
+#hours {
+  height: 25%;
+  width: 4%;
+
+  transform: rotate(var(--hours, 95deg)) translateY(-50%);
+}
+
+#minutes {
+  height: 45%;
+  width: 4%;
+
+  transform: rotate(var(--minutes, 135deg)) translateY(-50%);
+}
+
+#seconds {
+  width: 2%;
+  height: 45%;
+
+  transform: rotate(var(--seconds, 30deg)) translateY(-50%);
+}
+
+label {
+  margin: 12vmin;
+  font-size: 8vmin;
+  align-items: center;
+  justify-content: center;
+}
