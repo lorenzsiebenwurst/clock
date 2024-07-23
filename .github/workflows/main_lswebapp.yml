@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy JAR app to Azure Web App - lswebapp
+name: Build and deploy Node.js app to Azure Web App - lswebapp
 
 on:
   push:
@@ -16,23 +16,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Java version
-        uses: actions/setup-java@v4
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
         with:
-          java-version: '21'
-          distribution: 'microsoft'
+          node-version: '18.x'
 
-      - name: Build with Maven
-        run: mvn clean install
-
+      - name: npm install, build, and test
+        run: |
+          npm install
+          npm run build --if-present
+          npm run test --if-present
+      
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: java-app
-          path: '${{ github.workspace }}/target/*.jar'
+          name: node-app
+          path: .
 
   deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs: build
     environment:
       name: 'Production'
@@ -44,20 +46,20 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: java-app
+          name: node-app
       
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_B105C993F86342F7B29595D980D9E742 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_AB047CFA43CB4FABA631C79AD47428C8 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_7C26D574C0FF462387A11F8C44455DA2 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_3E85C2BB7DDD4F20BB30AA6931D731F3 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_81DF9615727D4F538B45D9F34FD60412 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4BD8CA35DD8F425697B27F04E9509414 }}
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
+      - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
+        id: deploy-to-webapp
         with:
           app-name: 'lswebapp'
           slot-name: 'Production'
-          package: '*.jar'
+          package: .
           
